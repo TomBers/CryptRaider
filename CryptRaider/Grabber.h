@@ -42,5 +42,5 @@ private:
 
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
-	bool CarryingObject = false;
+	void DrawDebug(FVector Start, FVector End) const;
 };

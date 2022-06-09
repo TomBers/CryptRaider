@@ -43,4 +43,5 @@ private:
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
 	void DrawDebug(FVector Start, FVector End) const;
+	void PickUpObject() const;
 };

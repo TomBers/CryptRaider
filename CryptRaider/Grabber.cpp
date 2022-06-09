@@ -24,7 +24,7 @@ void UGrabber::BeginPlay()
 
 	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
 
-	if(PhysicsHandle != nullptr)
+	if (PhysicsHandle != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Physics: %s"), *PhysicsHandle->GetName());
 	}
@@ -38,7 +38,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
 
-	if(PhysicsHandle == nullptr)
+	if (PhysicsHandle == nullptr)
 	{
 		return;
 	}
@@ -50,17 +50,16 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UGrabber::Grab()
 {
-
 	UPrimitiveComponent* HoldingObject = GetPhysicsHandle()->GetGrabbedComponent();
 
-	if(HoldingObject == nullptr)
+	if (HoldingObject == nullptr)
 	{
 		PickUpObject();
-	} else
+	}
+	else
 	{
 		GetPhysicsHandle()->ReleaseComponent();
 	}
-	
 }
 
 void UGrabber::PickUpObject() const
@@ -68,10 +67,10 @@ void UGrabber::PickUpObject() const
 	// Pickup object
 	const FVector Start = GetComponentLocation();
 	const FVector End = Start + GetForwardVector() * MaxGrabDistance;
-	
+
 	FHitResult HitResult;
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
-	
+
 	bool HasHit = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		Start,
@@ -80,24 +79,23 @@ void UGrabber::PickUpObject() const
 		ECC_GameTraceChannel2,
 		Sphere);
 
-	if(HasHit)
+	if (HasHit)
 	{
 		UPrimitiveComponent* HitComp = HitResult.GetComponent();
 		HitComp->WakeAllRigidBodies();
-		
+
 		GetPhysicsHandle()->GrabComponentAtLocationWithRotation(
 			HitComp,
 			NAME_None,
 			HitResult.ImpactPoint,
 			GetComponentRotation()
 		);
-		AActor *HitActor = HitResult.GetActor();
+		AActor* HitActor = HitResult.GetActor();
 		UE_LOG(LogTemp, Warning, TEXT("Grabber Hit: %s"), *HitActor->GetName());
 
 		// DrawDebugSphere(GetWorld(), HitResult.Location, 10, 10, FColor::Green, true, 5);
 		// DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10, 10, FColor::Red, true, 5);
 	}
-	
 }
 
 void UGrabber::DrawDebug(FVector Start, FVector End) const
@@ -114,4 +112,3 @@ UPhysicsHandleComponent* UGrabber::GetPhysicsHandle() const
 {
 	return GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 }
-

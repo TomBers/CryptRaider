@@ -73,6 +73,8 @@ void UGrabber::PickUpObject() const
 		UPrimitiveComponent* HitComp = HitResult.GetComponent();
 		HitComp->WakeAllRigidBodies();
 
+		HitResult.GetActor()->Tags.Add("GRABBED");
+
 		GetPhysicsHandle()->GrabComponentAtLocationWithRotation(
 			HitComp,
 			NAME_None,

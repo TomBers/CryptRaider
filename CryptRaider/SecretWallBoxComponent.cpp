@@ -16,6 +16,12 @@ void USecretWallBoxComponent::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("SecretWallBoxCollison"));
 }
 
+void USecretWallBoxComponent::SetMover(UMover* NewMover)
+{
+	Mover = NewMover;
+}
+
+
 void USecretWallBoxComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -23,9 +29,13 @@ void USecretWallBoxComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	TArray<AActor*> Actors;
 	GetOverlappingActors(Actors);
 
-	for (int i = 0; i < Actors.Num(); i ++)
+	for (const AActor* Actor : Actors)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor %i %s"), i,  *Actors[i]->GetName());
+		if (Actor->ActorHasTag("UNLOCK_DOOR"))
+		{
+			Mover->SetShouldMove(true);
+			UE_LOG(LogTemp, Warning, TEXT("Actor %s"), *Actor->GetName());
+		}
 	}
 	
 }
